@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <title>Boolzapp</title>
+  </head>
+  <body>
+    
+    <div id="app" class="container">
+      <!-- *************************
+          CONTENITORE SX
+  **************************** -->
+      <div class="left">
+        <div class="header-left">
+          <div class="header-left-logo">
+            <img src="img/avatar_1.jpg" alt="Utente" />
+            <span>Nome</span>
+          </div>
+          <div class="header-left-icons">
+            <i class="fas fa-circle-notch"></i>
+            <i class="fas fa-comment-alt"></i>
+            <i class="fas fa-ellipsis-v"></i>
+          </div>
+        </div>
+        <div class="left-disclaimer">
+          <div class="left-disclaimer-logo">
+            <i class="fa fa-bell-slash" aria-hidden="true"></i>
+          </div>
+          <div class="left-disclaimer-text">
+            <h3>Ricevi notifiche di nuovi messaggi</h3>
+            <a href="#">Attiva notifiche desktop</a>
+          </div>
+        </div>
+        <div class="left-searchbar">
+          <label class="search-label" for="search">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </label>
+          <input
+              type="text"
+              id="contacts-filter"
+              class="left-searchbar-input"
+              placeholder="Cerca o inizia una nuova chat"
+              name="search"
+              v-model.trim="search"
+              @input="filterContacts"
+          />
+      
+        </div>
+        
+          <div class="contacts">
+            <div class="contact" 
+            v-for="(contact, index) in contacts"
+            :key="contact.id"
+            :class="{ active: activeContactIndex === index}"
+            @click="selectContact(index)"
+            
+            > 
+            
+            
+            <div class="contact-logo">
+                <img :src="contact.avatar" alt="Avatar">
+              </div>
+              <div class="contact-info">
+                <!-- INFO CONTATTO -->
+                <h3 class="contact-name">{{ contact.name }}</h3>
+               
+                <span class="last-message" v-if="contact.messages.length > 0">
+                  <span v-if="contact.messages[contact.messages.length - 1].status === 'sent'">Tu: </span>
+                  {{ contact.messages[contact.messages.length - 1].message }}
+                  
+                </span>
+                <!-- AGGIUNGO DATA CON VUE.JS-->
+                <small class="message-time">{{ contact.messages[contact.messages.length - 1].date }}</small>
+
+              </div>
+
+
+
+
+                
+            </div>
+          </div>
+   
+      </div>
+  
+         <!-- *************************
+                   CONTENITORE SX
+          **************************** -->
+          <!-- *************************
+                   CONTENITORE DX
+          **************************** -->
+      
+          <div class="right">
+        
+            <div class="header-right">
+        
+              <div class="header-right-logo">
+        
+                <img :src="activeContact.avatar" alt="" />
+        
+                <h3>
+        
+                  <span id="header-right-contact-name">{{ activeContact.name }}</span> <br />
+                  
+                  <small class="time">Ultimo accesso oggi alle </small>
+        
+                </h3>
+        
+              </div>
+        
+              <div class="header-right-icons">
+        
+                <i class="fas fa-search"></i>
+        
+                <i class="fas fa-paperclip"></i>
+        
+                <i class="fas fa-ellipsis-v"></i>
+          </div>
+        </div>
+        <div class="right-messages-container">
+          <div class="right-messages">
+            
+            <div v-for="message in activeContact.messages" :key="message.date" :class="{ 'sent': message.status === 'sent', 'received': message.status === 'received' }" class="message">
+              <div v-if="message.status === 'sent'" class="sent-message">{{ message.message }}</div>
+              <!-- //VISUALIZZARE CONTENUTO -->
+              <div v-else class="message.received">{{ message.message }}</div>
+              <!-- VISUALIZZARE DATA -->
+              <div class="message-time">{{ message.date }}</div>
+
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="right-footer">
+          <div class="right-footer-icon f-left">
+            <i class="far fa-smile"></i>
+          </div>
+          <input
+            class="new-message-inputs"
+            placeholder="Scrivi un messaggio"
+            v-model="newMessage"
+            @keyup.enter="sendMessage"
+          />
+          <div class="right-footer-icon f-right">
+            <i class="fa fa-microphone" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+      <!-- /contenitore dx -->
+    </div>
+    <!-- *************************
+          COLLEGAMENTO VUE.JS
+  **************************** -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- *************************
+          COLLEGAMENTO JS
+  **************************** -->
+    
+    <script src="js/main.js"></script>
+  </body>
+</html>
